@@ -35,9 +35,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dictionary.Projections.Favo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dictionary.WebApp", "src\Clients\BlazorWeb\Dictionary.WebApp\Dictionary.WebApp.csproj", "{7FDE8CA2-10ED-410C-8158-9264B733A6BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionary.Projections.UserService", "src\Projections\Dictionary.Projections.UserService\Dictionary.Projections.UserService.csproj", "{8FE97838-7672-4B47-B003-8FD5C9243B09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dictionary.Projections.UserService", "src\Projections\Dictionary.Projections.UserService\Dictionary.Projections.UserService.csproj", "{8FE97838-7672-4B47-B003-8FD5C9243B09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dictionary.Projections.VoteService", "src\Projections\Dictionary.Projections.VoteService\Dictionary.Projections.VoteService.csproj", "{0370F8AF-9C19-4CEE-B7E2-188A0CE97E6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dictionary.Projections.VoteService", "src\Projections\Dictionary.Projections.VoteService\Dictionary.Projections.VoteService.csproj", "{0370F8AF-9C19-4CEE-B7E2-188A0CE97E6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1EFEF4A1-835E-443D-AFCF-A8A5EB968FFD}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
