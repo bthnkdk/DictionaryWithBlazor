@@ -1,6 +1,6 @@
 ﻿namespace Dictionary.Api.Domain.Models;
 
-public class EntryFavourite
+public class EntryFavourite: BaseEntity
 {
     public Guid EntryId { get; set; }
     public Guid CreatedById { get; set; }
