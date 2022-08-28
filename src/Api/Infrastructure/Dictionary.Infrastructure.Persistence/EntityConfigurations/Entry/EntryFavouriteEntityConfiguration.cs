@@ -19,7 +19,8 @@ namespace Dictionary.Infrastructure.Persistence.EntityConfigurations
 
             builder.HasOne(p => p.CreatedUser)
                    .WithMany(p => p.EntryFavourites)
-                   .HasForeignKey(p => p.CreatedById);
+                   .HasForeignKey(p => p.CreatedById)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

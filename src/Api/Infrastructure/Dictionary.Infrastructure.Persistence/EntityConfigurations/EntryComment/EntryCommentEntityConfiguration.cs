@@ -15,7 +15,8 @@ namespace Dictionary.Infrastructure.Persistence.EntityConfigurations
 
             builder.HasOne(p => p.CreatedBy)
                     .WithMany(p => p.EntryComments)
-                    .HasForeignKey(p => p.CreatedById);
+                    .HasForeignKey(p => p.CreatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
 
 
             builder.HasOne(p => p.Entry)
