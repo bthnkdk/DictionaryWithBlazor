@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Dictionary.Api.Application\Dictionary.Api.Application.csproj" />
     <ProjectReference Include="..\..\Core\Dictionary.Api.Domain\Dictionary.Api.Domain.csproj" />
   </ItemGroup>
 
