@@ -157,6 +157,138 @@ namespace Dictionary.Infrastructure.Persistence.Repositories
             return query;
         }
 
+        public virtual async Task<List<TEntity>> GetList(Expression<Func<TEntity, bool>> predicate, bool isNoTracking = true, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = entity.AsQueryable();
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            if (orderBy != null)
+                query = orderBy(query);
+
+            if (isNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.ToListAsync();
+        }
+
+        public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, bool isNoTracking = true, params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = entity.AsQueryable();
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            query = ApplyIncludes(query, includes);
+
+            if (isNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public virtual async Task<TEntity> GetByIdAsync(Guid id, bool isNoTracking = true, params Expression<Func<TEntity, object>>[] includes)
+        {
+            TEntity fEntity = await entity.FindAsync(id);
+
+            if (fEntity == null)
+                return null;
+
+            if (isNoTracking)
+                dbContext.Entry(fEntity).State = EntityState.Modified;
+
+            foreach (Expression<Func<TEntity, object>> include in includes)
+            {
+                dbContext.Entry(fEntity).Reference(include).Load();
+            }
+
+            return fEntity;
+        }
+
+        public virtual async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, bool isNoTracking = true, params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = entity.AsQueryable();
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            query = ApplyIncludes(query, includes);
+
+            if (isNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.SingleOrDefaultAsync();
+        }
+
+        #endregion
+
+        #region bulk methods
+
+        public Task BulkDeleteById(IEnumerable<Guid> ids)
+        {
+            if (ids != null && !ids.Any())
+                return Task.CompletedTask;
+
+            dbContext.RemoveRange(entity.Where(s => ids.Contains(s.Id)));
+            return dbContext.SaveChangesAsync();
+        }
+
+        public Task BulkDelete(Expression<Func<TEntity, bool>> predicate)
+        {
+            dbContext.RemoveRange(predicate);
+            return dbContext.SaveChangesAsync();
+        }
+
+        public Task BulkDelete(IEnumerable<TEntity> entities)
+        {
+            if (entities != null && !entities.Any())
+                return Task.CompletedTask;
+
+            foreach (TEntity item in entities)
+            {
+                if (dbContext.Entry(item).State == EntityState.Detached)
+                {
+                    this.entity.Attach(item);
+                }
+            }
+
+            this.entity.RemoveRange(entities);
+
+            return dbContext.SaveChangesAsync();
+        }
+
+        public Task BulkUpdate(IEnumerable<TEntity> entities)
+        {
+            if (entities != null && !entities.Any())
+                return Task.CompletedTask;
+
+            foreach (TEntity item in entities)
+            {
+                this.entity.Attach(item);
+                dbContext.Entry(entity).State = EntityState.Modified;
+            }
+
+            return dbContext.SaveChangesAsync();
+        }
+
+        public virtual async Task BulkAdd(IEnumerable<TEntity> entities)
+        {
+            if (entities != null && !entities.Any())
+                await Task.CompletedTask;
+
+            await entity.AddRangeAsync(entities);
+
+            await dbContext.SaveChangesAsync();
+        }
+
+        #endregion
+
         private static IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includes)
         {
             if (includes != null)
@@ -169,7 +301,5 @@ namespace Dictionary.Infrastructure.Persistence.Repositories
 
             return query;
         }
-        #endregion
-
     }
 }
