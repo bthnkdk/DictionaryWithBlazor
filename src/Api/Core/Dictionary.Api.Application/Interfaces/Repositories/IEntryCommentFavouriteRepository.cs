@@ -2,7 +2,7 @@
 
 namespace Dictionary.Api.Application.Interfaces.Repositories
 {
-    public interface IEntryRepository: IGenericRepository<Entry>
+    public interface IEntryCommentFavouriteRepository : IGenericRepository<EntryCommentFavourite>
     {
     }
 }
