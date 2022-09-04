@@ -30,6 +30,7 @@ namespace Dictionary.Infrastructure.Persistence.Extensions
             services.AddScoped<IEntryCommentVoteRepository, EntryCommentVoteRepository>();
             services.AddScoped<IEntryFavouriteRepository, EntryFavouriteRepository>();
             services.AddScoped<IEntryVoteRepository, EntryVoteRepository>();
+            services.AddScoped<IEmailConfirmationRepository, EmailConfirmationRepository>();
 
             return services;
         }

@@ -1,6 +1,5 @@
 ﻿using Dictionary.Api.Application.Interfaces.Repositories;
 using Dictionary.Api.Domain.Models;
-using Dictionary.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -8,10 +7,10 @@ namespace Dictionary.Infrastructure.Persistence.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly DictionaryContext dbContext;
+        private readonly DbContext dbContext;
         protected DbSet<TEntity> entity => dbContext.Set<TEntity>();
 
-        public GenericRepository(DictionaryContext dbContext)
+        public GenericRepository(DbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
@@ -108,13 +107,13 @@ namespace Dictionary.Infrastructure.Persistence.Repositories
 
         public virtual bool DeleteRange(Expression<Func<TEntity, bool>> predicate)
         {
-            dbContext.RemoveRange(predicate);
+            dbContext.RemoveRange(entity.Where(predicate));
             return dbContext.SaveChanges() > 0;
         }
 
         public virtual async Task<bool> DeleteRangeAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            dbContext.RemoveRange(predicate);
+            dbContext.RemoveRange(entity.Where(predicate));
             return await dbContext.SaveChangesAsync() > 0;
         }
 
@@ -241,7 +240,7 @@ namespace Dictionary.Infrastructure.Persistence.Repositories
 
         public Task BulkDelete(Expression<Func<TEntity, bool>> predicate)
         {
-            dbContext.RemoveRange(predicate);
+            dbContext.RemoveRange(entity.Where(predicate));
             return dbContext.SaveChangesAsync();
         }
 
