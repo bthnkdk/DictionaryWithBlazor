@@ -1,4 +1,6 @@
-﻿using Dictionary.Common.Models.CommandModels;
+﻿using Dictionary.Api.Application.Features.Commands.User.ConfirmEmail;
+using Dictionary.Common.Models.CommandModels;
+using Dictionary.Common.Models.CommandModels.User;
 using Dictionary.Common.Models.RequestModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,7 @@ namespace Dictionary.Api.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IMediator mediator;
 
@@ -18,7 +20,7 @@ namespace Dictionary.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody]LoginUserCommand command)
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
             var result = await mediator.Send(command);
 
@@ -37,6 +39,27 @@ namespace Dictionary.Api.WebApi.Controllers
         [Route("Update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
+            var result = await mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("Confirm")]
+        public async Task<IActionResult> Confirm(Guid id)
+        {
+            var result = await mediator.Send(new ConfirmEmailCommand() { ConfirmationId = id });
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordCommand command)
+        {
+            if (!command.UserId.HasValue)
+                command.UserId = UserId;
+
             var result = await mediator.Send(command);
 
             return Ok(result);
