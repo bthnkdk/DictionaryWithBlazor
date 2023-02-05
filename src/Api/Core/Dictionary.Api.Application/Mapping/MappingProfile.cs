@@ -13,6 +13,7 @@ namespace Dictionary.Api.Application.Mapping
             CreateMap<User, CreateUserCommand>().ReverseMap();
             CreateMap<User, UpdateUserCommand>().ReverseMap();
             CreateMap<Entry, CreateEntryCommand>().ReverseMap();
+            CreateMap<EntryComment, CreateEntryCommentCommand>().ReverseMap();
         }
     }
 }
