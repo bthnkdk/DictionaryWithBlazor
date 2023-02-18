@@ -20,6 +20,10 @@ namespace Dictionary.Api.Application.Interfaces.Repositories
         bool DeleteRange(Expression<Func<TEntity, bool>> predicate);
         Task<bool> DeleteRangeAsync(Expression<Func<TEntity, bool>> predicate);
 
+        Task<int> AddOrUpdateAsync(TEntity entity);
+        int AddOrUpdate(TEntity entity);
+        IQueryable<TEntity> AsQueryable();
+
         Task<List<TEntity>> GetList(Expression<Func<TEntity, bool>> predicate, bool isNoTracking = true, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, params Expression<Func<TEntity, object>>[] includes);
         Task<TEntity> GetByIdAsync(Guid id, bool isNoTracking = true, params Expression<Func<TEntity, object>>[] includes);
         Task<TEntity> GetSingleAsync(Expression<Func<TEntity,bool>> predicate, bool isNoTracking = true, params Expression<Func<TEntity, object>>[] includes);

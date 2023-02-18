@@ -300,5 +300,10 @@ namespace Dictionary.Infrastructure.Persistence.Repositories
 
             return query;
         }
+
+        public IQueryable<TEntity> AsQueryable()
+        {
+           return entity.AsQueryable();
+        }
     }
 }

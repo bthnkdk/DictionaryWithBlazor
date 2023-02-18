@@ -1,4 +1,5 @@
-﻿using Dictionary.Common.Models.CommandModels;
+﻿using Dictionary.Api.Application.Features.Queries.GetEntries;
+using Dictionary.Common.Models.CommandModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,14 @@ namespace Dictionary.Api.WebApi.Controllers
         public EntryController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetEntries([FromQuery] GetEntriesQuery query)
+        {
+            var entries = await mediator.Send(query);
+
+            return Ok(entries);
         }
 
         [HttpPost]
