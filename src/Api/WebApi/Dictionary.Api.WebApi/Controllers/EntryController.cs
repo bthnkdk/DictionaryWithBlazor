@@ -1,4 +1,5 @@
 ﻿using Dictionary.Api.Application.Features.Queries.GetEntries;
+using Dictionary.Api.Application.Features.Queries.GetEntries.GetMainPageEntries;
 using Dictionary.Common.Models.CommandModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,15 @@ namespace Dictionary.Api.WebApi.Controllers
         public async Task<IActionResult> GetEntries([FromQuery] GetEntriesQuery query)
         {
             var entries = await mediator.Send(query);
+
+            return Ok(entries);
+        }
+
+        [HttpGet]
+        [Route("MainPageEntries")]
+        public async Task<IActionResult> GetMainPageEntries(int page, int pageSize)
+        {
+            var entries = await mediator.Send(new GetMainPageEntriesQuery(UserId, page, pageSize));
 
             return Ok(entries);
         }
