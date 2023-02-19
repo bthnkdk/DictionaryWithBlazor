@@ -12,6 +12,5 @@ namespace Dictionary.Api.Application.Features.Queries.GetEntries.GetMainPageEntr
         }
 
         public Guid? UserId { get; set; }
-
     }
 }
