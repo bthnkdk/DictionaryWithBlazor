@@ -1,4 +1,5 @@
 ﻿using Dictionary.Api.Application.Features.Commands.User.ConfirmEmail;
+using Dictionary.Api.Application.Features.Queries.GetUserDetail;
 using Dictionary.Common.Models.CommandModels;
 using Dictionary.Common.Models.CommandModels.User;
 using Dictionary.Common.Models.RequestModels;
@@ -16,6 +17,24 @@ namespace Dictionary.Api.WebApi.Controllers
         public UserController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var result = await mediator.Send(new GetUserDetailQuery(id));
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("UserName/{userName}")]
+        public async Task<IActionResult> GetByUserName(string userName)
+        {
+            var result = await mediator.Send(new GetUserDetailQuery(Guid.Empty, userName));
+
+            return Ok(result);
         }
 
         [HttpPost]

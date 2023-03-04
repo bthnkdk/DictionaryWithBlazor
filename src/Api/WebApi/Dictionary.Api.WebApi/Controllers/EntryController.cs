@@ -1,6 +1,10 @@
 ﻿using Dictionary.Api.Application.Features.Queries.GetEntries;
 using Dictionary.Api.Application.Features.Queries.GetEntries.GetMainPageEntries;
+using Dictionary.Api.Application.Features.Queries.GetEntryComments;
+using Dictionary.Api.Application.Features.Queries.GetEntryDetail;
+using Dictionary.Api.Application.Features.Queries.GetUserEntries;
 using Dictionary.Common.Models.CommandModels;
+using Dictionary.Common.Models.QueriesModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +27,33 @@ namespace Dictionary.Api.WebApi.Controllers
             var entries = await mediator.Send(query);
 
             return Ok(entries);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var entries = await mediator.Send(new GetEntryDetailQuery(UserId, id));
+
+            return Ok(entries);
+        }
+
+        [HttpGet("Comments/{id}")]
+        public async Task<IActionResult> GetEntryComments(Guid id, int page, int pageSize)
+        {
+            var entries = await mediator.Send(new GetEntryCommentsQuery(id, UserId, page, pageSize));
+
+            return Ok(entries);
+        }
+
+        [HttpGet("UserEntries")]
+        public async Task<IActionResult> GetUserEntries(string userName, Guid userId, int page, int pageSize)
+        {
+            if (userId == Guid.Empty && string.IsNullOrEmpty(userName))
+                userId = UserId.Value;
+
+            var result = await mediator.Send(new GetUserEntriesQuery(userId, userName, page, pageSize));
+
+            return Ok(result);
         }
 
         [HttpGet]
@@ -54,6 +85,15 @@ namespace Dictionary.Api.WebApi.Controllers
                 command.CreatedById = UserId;
 
             var result = await mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("Search")]
+        public async Task<IActionResult> Searh([FromQuery] SearchEntryQuery query)
+        {
+            var result = await mediator.Send(query);
 
             return Ok(result);
         }

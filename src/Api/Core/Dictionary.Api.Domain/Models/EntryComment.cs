@@ -1,4 +1,6 @@
-﻿namespace Dictionary.Api.Domain.Models;
+﻿using Dictionary.Common.ViewModels;
+
+namespace Dictionary.Api.Domain.Models;
 
 public class EntryComment : BaseEntity
 {
@@ -11,4 +13,5 @@ public class EntryComment : BaseEntity
 
     public virtual ICollection<EntryCommentVote> EntryCommentVotes { get; set; }
     public virtual ICollection<EntryCommentFavourite> EntryCommentFavourites { get; set; }
+    public VoteType VoteType { get; set; }
 }
