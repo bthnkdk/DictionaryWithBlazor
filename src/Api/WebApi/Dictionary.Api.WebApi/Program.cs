@@ -1,4 +1,5 @@
 using Dictionary.Api.Application.Extension;
+using Dictionary.Api.WebApi.Infrastructure.ActionFilters.Extensions;
 using Dictionary.Infrastructure.Persistence.Extensions;
 using FluentValidation.AspNetCore;
 
@@ -16,6 +17,8 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.ConfigureAuth(builder.Configuration);
+
 builder.Services.AddApplicationRegistration();
 builder.Services.AddInfrastructureRegistration(builder.Configuration);
 
@@ -30,6 +33,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.ConfigureExceptionHandling(app.Environment.IsDevelopment());
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
