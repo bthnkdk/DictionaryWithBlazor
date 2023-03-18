@@ -22,9 +22,9 @@ builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.AddApplicationRegistration();
 builder.Services.AddInfrastructureRegistration(builder.Configuration);
 
-builder.Services.AddCors(s => s.AddPolicy("MyPolicy", builder =>
+builder.Services.AddCors(s => s.AddPolicy("policy", builder =>
 {
-    builder.AllowAnyOrigin()
+    builder.WithOrigins("*").AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader();
 }));
@@ -38,14 +38,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.ConfigureExceptionHandling(app.Environment.IsDevelopment());
 
+app.UseCors("policy");
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors("MyPolicy");
 
 app.MapControllers();
 
